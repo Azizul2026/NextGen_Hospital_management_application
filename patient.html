@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <title>Patient Panel</title>
@@ -20,9 +21,9 @@
 
 async function addPatient(){
 
-const name = document.getElementById("name").value
-const age = document.getElementById("age").value
-const cause = document.getElementById("cause").value
+const name = document.getElementById("name").value.trim()
+const age = document.getElementById("age").value.trim()
+const cause = document.getElementById("cause").value.trim()
 
 if(!name || !age || !cause){
 alert("Please fill all fields")
@@ -38,12 +39,20 @@ method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({name,age,cause})
+body:JSON.stringify({
+name:name,
+age:age,
+cause:cause
 })
+})
+
+if(!response.ok){
+throw new Error("Server returned error")
+}
 
 const data = await response.json()
 
-alert(data.message)
+alert(data.message || "Patient submitted successfully!")
 
 document.getElementById("name").value=""
 document.getElementById("age").value=""
@@ -52,7 +61,8 @@ document.getElementById("cause").value=""
 }
 catch(error){
 
-alert("Server error. Please try again later.")
+console.error(error)
+alert("Server is starting or connection failed. Please wait 30 seconds and try again.")
 
 }
 
