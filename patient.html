@@ -1,11 +1,64 @@
-
 <html>
 <head>
-    <title>Patient Panel</title>
+<title>Patient Panel</title>
 </head>
+
 <body>
-    <h2>🧑‍🦽 Patient Dashboard</h2>
-    <p>Welcome Patient</p>
-    <a href="index.html">Logout</a>
+
+<h1>🧑‍🦽 Patient Dashboard</h1>
+<p>Welcome Patient</p>
+
+<h2>Patient Form</h2>
+
+<input id="name" placeholder="Name"><br><br>
+<input id="age" placeholder="Age"><br><br>
+<input id="cause" placeholder="Cause of illness"><br><br>
+
+<button onclick="addPatient()">Submit</button>
+
+<script>
+
+async function addPatient(){
+
+const name = document.getElementById("name").value
+const age = document.getElementById("age").value
+const cause = document.getElementById("cause").value
+
+if(!name || !age || !cause){
+alert("Please fill all fields")
+return
+}
+
+try{
+
+const response = await fetch("http://127.0.0.1:5000/add_patient",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({name,age,cause})
+})
+
+const data = await response.json()
+
+alert(data.message)
+
+document.getElementById("name").value=""
+document.getElementById("age").value=""
+document.getElementById("cause").value=""
+
+}
+catch(error){
+alert("Server error. Make sure Flask is running.")
+}
+
+}
+
+</script>
+
+<br><br>
+
+<a href="index.html">Logout</a>
+
 </body>
 </html>
